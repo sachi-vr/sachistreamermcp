@@ -1,0 +1,18 @@
+[project]
+name = "sachistreamermcp"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastmcp>=2.5.2",
+    "mss>=10.0.0",
+    "numpy>=2.2.6",
+    "obsws-python>=1.7.2",
+    "openai>=1.82.1",
+    "pillow>=11.2.1",
+    "pydub>=0.25.1",
+    "pytest>=8.3.5",
+    "pywin32>=310",
+    "sounddevice>=0.5.2",
+]
