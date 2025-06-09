@@ -133,8 +133,10 @@ def streamer_get_audio_devices() -> list[str]:
 
 # 音声合成を行う
 @mcp.tool()
-def speak_tts(text:str, device:str|None=None) -> bool:
-    """Speak a text string using the text-to-speech engine. Optionally specify output device name."""
+def speak_tts(text: str, device: str | None = None) -> str:
+    """Speak a text string (up to 50 chars) using the text-to-speech engine. Optionally specify output device name. Returns the spoken string."""
+    max_len = 200
+    spoken_text = text[:max_len]
     client = OpenAI(base_url="http://127.0.0.1:8880/v1", api_key="not-needed")
 
     buffer = io.BytesIO()
@@ -144,8 +146,8 @@ def speak_tts(text:str, device:str|None=None) -> bool:
     # https://github.com/hexgrad/kokoro
     with client.audio.speech.with_streaming_response.create(
         model="kokoro",
-        voice="jf_alpha", #single or multiple voicepack combo
-        input=text
+        voice="jf_alpha",  # single or multiple voicepack combo
+        input=spoken_text
     ) as response:
         # レスポンスをバッファに書き込む
         for chunk in response.iter_bytes():
@@ -158,7 +160,7 @@ def speak_tts(text:str, device:str|None=None) -> bool:
         samples = samples.reshape((-1, 2))
     sd.play(samples, samplerate=audio.frame_rate, device=device)
     sd.wait()
-    return True
+    return spoken_text
 
 # ダイアログを表示して文字列を入力させる
 @mcp.tool()
